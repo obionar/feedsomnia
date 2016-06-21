@@ -23,8 +23,8 @@ def search_filter(search_keyword):
 		print()
 
 def cli():
-	print("\n Hi! Enter your search term or press h to Help.")
 	while True:
+		print("\nEnter your search term or press h to Help.")
 		command = input("command: ")
 		os.system('clear')
 		print("\n**************************************** \n")
