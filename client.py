@@ -6,13 +6,11 @@ c = conn.cursor()
 search_keyword = ''
 search_category = ''
 
-
 def get_help():
 	print("""Press:
 Enter to show all content or some keyword to search for items and press Enter
 h to show this help.
 x to exit""")
-
 
 def search_filter(search_keyword):
 	c.execute('''SELECT * FROM Feeds WHERE Title LIKE '%{}%'
@@ -22,7 +20,6 @@ def search_filter(search_keyword):
 		print("Category:", row[1])
 		print("Link:", row[3])
 		print()
-
 
 def cli():
 	print("\n Hi! Enter your search term or press h to Help.")
