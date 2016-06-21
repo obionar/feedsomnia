@@ -14,11 +14,14 @@ def get_feeds():
 		Category = key['category']
 		Published = key['published']
 		Link = key['link']
+		print(Title)
 		#items.append([title, category, published, link])
 		c.execute ('INSERT OR IGNORE INTO Feeds VALUES(?, ?, ?, ?)', (Title, Category, Published, Link))
 		conn.commit()
 
 while True:
 	print("Getting new items every 5 min ...")
+	print("*****")
 	get_feeds()
+	print("*****")
 	time.sleep(300)
