@@ -10,24 +10,16 @@ c = conn.cursor()
 
 # Functions
 def search_filter():
-    c.execute('''SELECT * FROM Feeds WHERE Title LIKE '%{}%' ORDER BY Published ASC'''.format(search_box.get()))
+    c.execute('''SELECT * FROM Feeds WHERE Title LIKE '%{}%' ORDER BY Published DESC'''.format(search_box.get()))
     for row in c.fetchall():
         search_results.insert(END, row[0])
         print(row[0])
 
-
-#    os.system('clear')
-#    print("\n******************** Search Results for: {} ********************\n".format(search_box.get()))
 #    for row in c.fetchall():
 #        print("Title:", row[0])
 #        print("Category:", row[1])
 #        print("Link:", row[3])
 #        print()
-def inserts():
-    for entry in get:
-        search_results.insert(END, row[0])
-
-
 
 # tkinter GUI
 root = Tk()
@@ -35,8 +27,8 @@ root.wm_title("Feedsomnia")
 
 # **** Toolbar ****
 toolbar = ttk.Frame(root)
-#search_label = Label(toolbar, text="Filter: ")
-#search_label.pack(side=LEFT)
+search_label = Label(toolbar, text="Filter: ")
+search_label.pack(side=LEFT)
 search_box = ttk.Entry(toolbar)
 search_box.pack(side=LEFT, padx=4, pady=4)
 search_button = ttk.Button(toolbar, text="Search", command=search_filter)
@@ -47,19 +39,17 @@ exit_button = ttk.Button(toolbar, text="Exit", command=root.quit)
 exit_button.pack(side=LEFT, padx=4, pady=4)
 toolbar.pack(side=TOP, fill=X)
 
+# **** Insomnia Logo ****
 img = PhotoImage(file="insomnia.png")
 imglabel = Label(root, image=img)
 imglabel.pack(pady=10)
 
-# Todo: Show me search results here!
+# **** Search Results ****
 scrollbar = ttk.Scrollbar(root)
 scrollbar.pack(side=RIGHT, fill=Y)
-
 search_results = Listbox(root)
 search_results.pack( fill=BOTH, expand=2)
 scrollbar.config(command=search_results.yview)
-
-
 
 # **** Statusbar ****
 status = Label(root, text="Preparing to do nothing!", bd=1, relief=SUNKEN, anchor=W)
