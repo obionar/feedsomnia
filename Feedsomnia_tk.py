@@ -79,11 +79,9 @@ class Feedsomnia(Tk):
 			for row in c.fetchall():
 				self.tree.insert("" , 0, text=row[4], values=(row[0], row[1], row[2], row[3]))
 
-		
 
 app = Feedsomnia()
 app.title("Feedsomnia")
 app.minsize(width=400, height=300)
 app.mainloop()
 
-update_clock(self)
