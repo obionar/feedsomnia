@@ -1,14 +1,20 @@
 #!/usr/bin/python3
+import time
+import feedparser
 import sqlite3
+import webbrowser
 from tkinter import *
 from tkinter import ttk
-import webbrowser
-import time
 from datetime import datetime
+from time import gmtime, strftime
+
+url = 'http://www.insomnia.gr/index.php?app=core&module=global&section=rss&type=classifieds&wanted=0'
 
 # SQLite Connection
 conn = sqlite3.connect('feeds.db')
 c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS Feeds(item_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+			Title TEXT, Category TEXT, Published TEXT UNIQUE, Link TEXT)''')
 
 class Feedsomnia(Tk):
 	def __init__(self):
@@ -24,17 +30,12 @@ class Feedsomnia(Tk):
 		self.entry.pack(side=LEFT, padx=4, pady=4)
 
 		# refresh button
-		self.button = ttk.Button(self.toolbar, text="Refresh", command=self.get_results)
-		self.button.pack(side=LEFT, padx=4, pady=4)
+		self.btn_refresh = ttk.Button(self.toolbar, text="Update Feeds", command=self.update_db)
+		self.btn_refresh.pack(side=LEFT, padx=4, pady=4)
 
 		# quit button
 		self.button = ttk.Button(self.toolbar, text="Quit", command=self.quit)
 		self.button.pack(side=RIGHT, padx=4, pady=4)
-
-		# **** AUTOREFRESH TODO!!! *****
-		#self.autorefresh_var = IntVar()
-		#self.autorefresh_check = ttk.Checkbutton(self.toolbar, text="Autorefresh", ) #variable=self.autorefresh_var, command=self.autorefresh)
-		#self.autorefresh_check.pack(side=RIGHT)
 
 		# TreeView
 		self.tree = ttk.Treeview(self)
@@ -65,13 +66,29 @@ class Feedsomnia(Tk):
 	#double click on item
 	def double_click(self, event):
 		item = self.tree.selection()[0]
-		print("you clicked on", self.tree.item(item,"text"))
+		print("you clicked on - ", self.tree.item(item,"text"))
 		open_url = self.tree.item(item,"text")
 		webbrowser.open_new_tab(open_url)
+	
+	def update_db(self):
+		print("getting feeds.. ")
+		self.tree.delete(*self.tree.get_children())
+		feed = feedparser.parse(url)
+		for key in feed['entries']:
+			Title = key['title']
+			Category = key['category']
+			Published = datetime.strptime(key['published'], '%a, %d %b %Y %H:%M:%S +0000')
+			Link = key['link']
+			#print(Title)
+			c.execute ('''INSERT OR IGNORE INTO Feeds(Title, Category, Published, Link) VALUES (?, ?, ?, ?)''', 
+				(Title, Category, Published, Link))
+			conn.commit()
+		print("\n({}) Database updated \n".format(strftime("%Y-%m-%d %H:%M:%S", gmtime())))
+		self.get_results()
+		self.after(600000, self.update_db) #auto update db every 10 minutes
 
 	# get results
 	def get_results(self, *event):
-		self.after(120000, self.get_results) # list autorefresh every 2 minutes
 		self.tree.delete(*self.tree.get_children())
 		self.get_entry = self.entry.get()
 		if len(self.get_entry) > 0:
@@ -80,8 +97,9 @@ class Feedsomnia(Tk):
 				self.tree.insert("" , 0, text=row[4], values=(row[0], row[1], row[2], row[3]))
 
 
-app = Feedsomnia()
-app.title("Feedsomnia")
-app.minsize(width=400, height=300)
-app.mainloop()
 
+app = Feedsomnia()
+app.title("Feedsomnia v0.1")
+app.minsize(width=400, height=200)
+app.update_db() #get new feeds at startup
+app.mainloop()
