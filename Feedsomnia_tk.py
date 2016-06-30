@@ -1,16 +1,11 @@
 #!/usr/bin/python3
 
 from bs4 import BeautifulSoup
-import requests
-import time
-import sqlite3
-import webbrowser
 from tkinter import *
 from tkinter import ttk
 from datetime import datetime
 from time import gmtime, strftime
-
-url = 'http://www.insomnia.gr/index.php?app=core&module=global&section=rss&type=classifieds&wanted=0'
+import requests, time, sqlite3, webbrowser
 
 # SQLite Connection
 conn = sqlite3.connect('feeds.db')
@@ -84,19 +79,32 @@ class Feedsomnia(Tk):
 	def update_db(self):
 		print("getting feeds.. ")
 		self.tree.delete(*self.tree.get_children())
-		page_source = requests.get('http://www.insomnia.gr/classifieds/latest/')
-		soup = BeautifulSoup(page_source.text)
-		table = soup.find("table")
-		for row in table.findAll("tr"):
-			col	 = row.findAll("td")
-			if len(col) == 4:
-				Title = col[1].find("a").text
-				Link = col[1].find('a')["href"]
-				Price = col[3].text
-				Category = col[1].findAll('li')[3].text
-				Published = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-				c.execute ('''INSERT OR IGNORE INTO Feeds(Title, Price, Category, Published, Link) VALUES (?, ?, ?, ?, ?)''', 
-				(Title, Price, Category, Published, Link))
+		page = 0 
+		while True:
+			page_source = requests.get('http://www.insomnia.gr/classifieds/latest/?st=' + str(page))
+			soup = BeautifulSoup(page_source.text)
+			table = soup.find("table")
+			for row in table.findAll("tr"):
+				col	 = row.findAll("td")
+				lock = row.find("img", {"src":"http://www.insomnia.gr/public/style_images/master/classifieds/lock.png"})
+				if len(col) == 4 and not lock:
+					Title = col[1].find("a").text
+					Link = col[1].find('a')["href"]
+					Price = col[3].text
+					Category = col[1].findAll('li')[3].text
+					Published = col[1].findAll('li')[1].text
+					rePublished = re.sub('σήμερα',  strftime("%Y-%m-%d"),  Published)
+					#Published = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+					if re.search('σήμερα', Published):
+						c.execute ('''INSERT OR IGNORE INTO Feeds(Title, Price, Category, Published, Link) VALUES (?, ?, ?, ?, ?)''', (Title, Price, Category, rePublished, Link))
+			#if re.search('σήμερα', Published):
+			#	page += 15
+			#	print("Getting page: http://www.insomnia.gr/classifieds/latest/?st={}".format(page))
+			#else:
+			#	break
+			break
+
+
 		# show number of items
 		c.execute('''SELECT * FROM Feeds''')
 		self.itemscount = len(c.fetchall())
@@ -106,7 +114,7 @@ class Feedsomnia(Tk):
 		self.get_results()
 		
 		#auto update db every 10 minutes
-		self.after(600000, self.update_db) 
+		self.after(800000, self.update_db) 
 
 	# get results
 	def get_results(self, *event):
@@ -119,6 +127,6 @@ class Feedsomnia(Tk):
 
 app = Feedsomnia()
 app.title("Feedsomnia v0.1")
-app.minsize(width=800, height=400)
-app.update_db() #get new feeds at startup
+app.minsize(width=800, height=200)
+#app.update_db() #get new feeds at startup
 app.mainloop()
