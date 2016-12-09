@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from tkinter import *
 from tkinter import ttk
-import wget
+#import wget
 import sqlite3
 import webbrowser
 import os
@@ -90,7 +90,7 @@ class Feedsomnia(Tk):
 	
 
 app = Feedsomnia()
-app.title("Feedsomnia v0.2")
+app.title("Feedsomnia v0.2.1")
 app.minsize(width=800, height=200)
 app.get_results()
 #app.update_db() #get new feeds at startup
