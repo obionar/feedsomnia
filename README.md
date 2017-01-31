@@ -1,29 +1,30 @@
 # Feedsomnia
 
-Unofficial insomnia.gr client for Linux desktop. Written in Python and Tk.
+feedsomnia ads search engine written in Python and Tk.
 
-### Download Feedsomnia v0.2
+### Download Feedsomnia v0.3
 
-Download Feedsomnia *NIX: Linux, BSD, Mac OS X:
+#### Feedsomnia source for *NIX: Linux, BSD, Mac OS X:
+https://raw.githubusercontent.com/obionar/feedsomnia/master/Feedsomnia.py
 
-https://raw.githubusercontent.com/obionar/feedsomnia/master/Feedsomnia_v0.2_linux.py
+#### Feedsomnia binary for Windows 7, 8.1, 10 (XP and Vista not supported):
+http://feedsomnia.online/release/win32/Feedsomnia_v0.3.1_Win32.exe
 
-### How to run:
+
+### How to run in unix:
 
 chmod +x Feedsomnia_v0.2_linux.py
 
 ./Feedsomnia_v0.2_linux.py
 
 ### Dependencies 
-Debian, Ubuntu, MINT:
+Debian Based - Ubuntu, MINT:
+sudo apt-get install python3-bs4 python3-requests python3-tk python3-pip && sudo pip install wget
 
-sudo apt-get install python3-bs4 python3-requests python3-tk 
+Arch Based - ArchBang, Mangaro, Parabola
+sudo pacman -S python-beautifulsoup4 python-requests python-pip tk && sudo pip install wget
 
-Arch, Mangaro:
-
-pacman -S python-beautifulsoup4 python-requests tk
-
-Windows & Mac Versions comnig soon...
+Mac Versions comnig soon...
 
 
 
