@@ -1,21 +1,21 @@
 # Feedsomnia
 
-feedsomnia ads search engine written in Python and Tk.
+Greek classified ads search engine written in Python and Tk.
 
 ### Download Feedsomnia v0.3
 
 #### Feedsomnia source for *NIX: Linux, BSD, Mac OS X:
 https://raw.githubusercontent.com/obionar/feedsomnia/master/Feedsomnia.py
 
-#### Feedsomnia binary for Windows 7, 8.1, 10 (XP and Vista not supported):
+#### Feedsomnia binary for Windows (7, 8.1, 10):
 http://feedsomnia.online/release/win32/Feedsomnia_v0.3.1_Win32.exe
 
+### How to run feedsomnia from Windows:
+just double click on icon :P
 
-### How to run in unix:
-
-chmod +x Feedsomnia_v0.2_linux.py
-
-./Feedsomnia_v0.2_linux.py
+### How to run from unix:
+chmod +x Feedsomnia.py
+./Feedsomnia.py
 
 ### Dependencies 
 Debian Based - Ubuntu, MINT:
