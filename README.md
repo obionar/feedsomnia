@@ -2,7 +2,7 @@
 
 Greek classified ads search engine written in Python and Tk.
 
-[!feedsomnia](https://ibin.co/3ApflSF7N9ev.png)
+![feedsomnia](https://ibin.co/3ApflSF7N9ev.png)
 
 ### Download Feedsomnia v0.3
 
