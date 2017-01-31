@@ -15,14 +15,18 @@ just double click on icon :P
 
 ### How to run from unix:
 chmod +x Feedsomnia.py
+
 ./Feedsomnia.py
 
 ### Dependencies 
 Debian Based - Ubuntu, MINT:
+
 sudo apt-get install python3-bs4 python3-requests python3-tk python3-pip && sudo pip install wget
 
 Arch Based - ArchBang, Mangaro, Parabola
+
 sudo pacman -S python-beautifulsoup4 python-requests python-pip tk && sudo pip install wget
+
 
 Mac Versions comnig soon...
 
